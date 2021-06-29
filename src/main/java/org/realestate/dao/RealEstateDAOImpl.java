@@ -27,10 +27,16 @@ public class RealEstateDAOImpl implements RealEstateDAO {
     }
 
     @Override
-    public List<RealEstate> allRealEstates() {
+    public List<RealEstate> allRealEstates(int page) {
 
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from RealEstate").list();
+        return session.createQuery("from RealEstate").setFirstResult(10 * (page - 1)).setMaxResults(10).list();
+    }
+
+    @Override
+    public int realEstatesCount() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(*) from RealEstate", Number.class).getSingleResult().intValue();
     }
 
     @Override

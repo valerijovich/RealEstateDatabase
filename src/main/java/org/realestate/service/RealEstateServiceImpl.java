@@ -28,8 +28,15 @@ public class RealEstateServiceImpl implements RealEstateService {
 
     @Override
     @Transactional
-    public List<RealEstate> allRealEstates() {
-        return realEstateDAO.allRealEstates();
+    public List<RealEstate> allRealEstates(int page) {
+        return realEstateDAO.allRealEstates(page);
+    }
+
+    @Override
+    @Transactional
+    public int realEstatesCount() {
+
+        return realEstateDAO.realEstatesCount();
     }
 
     @Override

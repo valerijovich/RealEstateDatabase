@@ -11,10 +11,7 @@ import org.realestate.model.RealEstate;
 import org.realestate.service.RealEstateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -29,6 +26,8 @@ import java.util.List;
  */
 @Controller
 public class RealEstateController {
+
+    private int page;
 
     /**
      * Let's add a service and call its methods.
@@ -50,12 +49,18 @@ public class RealEstateController {
      * We get a list of movies from the service and add it to the model
      * @return ModelAndView object.
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView allRealEstates() {
-        List<RealEstate> realEstates = realEstateService.allRealEstates();
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView allFilms(@RequestParam(defaultValue = "1") int page) {
+        this.page = page;
+        List<RealEstate> realEstatesList = realEstateService.allRealEstates(page);
+        int realEstatesCount = realEstateService.realEstatesCount();
+        int pagesCount = (realEstatesCount + 9)/10;
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
-        modelAndView.addObject("realEstatesList", realEstates);
+        modelAndView.addObject("page", page);
+        modelAndView.addObject("realEstatesList", realEstatesList);
+        modelAndView.addObject("realEstatesCount", realEstatesCount);
+        modelAndView.addObject("pagesCount", pagesCount);
         return modelAndView;
     }
 
@@ -87,7 +92,7 @@ public class RealEstateController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public ModelAndView editRealEstate(@ModelAttribute("realEstate") RealEstate realEstate) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/");
+        modelAndView.setViewName("redirect:/?page=" + this.page);
         realEstateService.edit(realEstate);
         return modelAndView;
     }
@@ -111,7 +116,7 @@ public class RealEstateController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView addRealEstate(@ModelAttribute("realEstate") RealEstate realEstate) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/");
+        modelAndView.setViewName("redirect:/?page=" + this.page);
         realEstateService.add(realEstate);
         return modelAndView;
     }
@@ -124,7 +129,7 @@ public class RealEstateController {
     @RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
     public ModelAndView deleteRealEstate(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/");
+        modelAndView.setViewName("redirect:/?page=" + this.page);
         RealEstate realEstate = realEstateService.getById(id);
         realEstateService.delete(realEstate);
         return modelAndView;

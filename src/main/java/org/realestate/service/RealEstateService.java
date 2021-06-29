@@ -9,7 +9,8 @@ import org.realestate.model.RealEstate;
 import java.util.List;
 
 public interface RealEstateService {
-    List<RealEstate> allRealEstates();
+    List<RealEstate> allRealEstates(int page);
+    public int realEstatesCount();
     void add(RealEstate realEstate);
     void delete(RealEstate realEstate);
     void edit(RealEstate realEstate);

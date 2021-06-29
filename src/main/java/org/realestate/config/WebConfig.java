@@ -9,6 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
@@ -20,11 +22,23 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  * @ComponentScan tells Spring where to look for the components it should manage, i.e. classes marked with
  * the @Component annotation or its derivatives, such as @Controller, @Repository, @Service.
  * These annotations automatically identify the class bean.
+ * The @EnableWebMvc annotation allows you not to configure anything, but just use the default configuration.
+ * And the WebMvcConfigurer interface allows you to override configuration methods. So we can use the default
+ * configuration, but at the same time customize some points for ourselves.
  */
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "org.realestate")
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
+
+    /**
+     * In this case, we need the addResourceHandlers method, with which we will indicate the location
+     * of static web resources.
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/res/**").addResourceLocations("/res/");
+    }
 
     /**
      * In the viewResolver () method, we create its implementation and determine exactly where to look for views in the
