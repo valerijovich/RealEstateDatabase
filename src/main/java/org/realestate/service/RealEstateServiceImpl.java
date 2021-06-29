@@ -8,6 +8,7 @@ import org.realestate.dao.RealEstateDAO;
 import org.realestate.model.RealEstate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,26 +27,31 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
+    @Transactional
     public List<RealEstate> allRealEstates() {
         return realEstateDAO.allRealEstates();
     }
 
     @Override
+    @Transactional
     public void add(RealEstate realEstate) {
         realEstateDAO.add(realEstate);
     }
 
     @Override
+    @Transactional
     public void delete(RealEstate realEstate) {
         realEstateDAO.delete(realEstate);
     }
 
     @Override
+    @Transactional
     public void edit(RealEstate realEstate) {
         realEstateDAO.edit(realEstate);
     }
 
     @Override
+    @Transactional
     public RealEstate getById(int id) {
         return realEstateDAO.getById(id);
     }

@@ -4,13 +4,33 @@
 
 package org.realestate.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "realEstates")
 public class RealEstate {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "rooms")
     private int rooms;
+
+    @Column(name = "floor")
     private int floor;
+
+    @Column(name = "totalArea")
     private float totalArea;
+
+    @Column(name = "livingArea")
     private float livingArea;
+
+    @Column(name = "kitchenArea")
     private float kitchenArea;
+
+    @Column(name = "district")
     private String district;
 
     public int getId() {
